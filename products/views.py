@@ -1,19 +1,17 @@
-import json
-
-from django.conf import settings
 from django.shortcuts import render
+
+from products.models import ProductCategory, Product
 
 
 def index(request):
     context = {'title': 'geekShop'}
-    return render(request, 'products/index.html', context)
+    return render(request, 'products/index.html', context=context)
 
 
 def products(request):
-    file_path = settings.BASE_DIR /'products/fixtures/goods.json'
-
     context = {
-        'title': 'geekShop - Продукты',
-        'products': json.load(open(file_path, encoding='utf-8'))
+        'title': 'GeekShop - Каталог',
+        'productcategory': ProductCategory.objects.all(),
+        'products': Product.objects.all()
     }
-    return render(request, 'products/products.html', context)
+    return render(request, 'products/products.html', context=context)
