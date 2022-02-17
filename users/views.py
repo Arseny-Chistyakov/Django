@@ -30,4 +30,4 @@ def registration(request):
     else:
         form = UserRegistrationForm()
     context = {"title": "GeekShop - Регистрация", "form": form}
-    return render(request, "users/register.html", context=context)
+    return render(request, "users/registration.html", context=context)
