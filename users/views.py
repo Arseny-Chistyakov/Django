@@ -1,4 +1,4 @@
-from django.contrib import auth
+from django.contrib import auth, messages
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 
@@ -27,6 +27,7 @@ def registration(request):
     if request.method == "POST":
         form = UserRegistrationForm(data=request.POST)
         if form.is_valid():
+            messages.success(request, "Congratulation! Success registration ")
             form.save()
             return HttpResponseRedirect(reverse("users:login"))
         else:
