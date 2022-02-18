@@ -2,6 +2,7 @@ from django.contrib import auth, messages
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 
+from baskets.models import Basket
 from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 
 
@@ -44,12 +45,17 @@ def logout(request):
 
 
 def profile(request):
+    user = request.user
     if request.method == "POST":
-        form = UserProfileForm(instance=request.user, files=request.FILES, data=request.POST)
+        form = UserProfileForm(instance=user, files=request.FILES, data=request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("users:profile"))
     else:
-        form = UserProfileForm(instance=request.user)
-    context = {"title": "GeekShop - Профиль", "form": form}
+        form = UserProfileForm(instance=user)
+    context = {
+        "title": "GeekShop - Профиль",
+        "form": form,
+        "baskets": Basket.objects.filter(user=user),
+    }
     return render(request, "users/profile.html", context=context)
