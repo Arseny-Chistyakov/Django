@@ -24,11 +24,11 @@ def login(request):
 
 
 def registration(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = UserRegistrationForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('users:login'))
+            return HttpResponseRedirect(reverse("users:login"))
         else:
             print(form.errors)
     else:

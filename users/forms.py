@@ -18,26 +18,26 @@ class UserLoginForm(AuthenticationForm):
 
 class UserRegistrationForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control py-4', 'placeholder': 'Введите имя пользователя'}))
+        "class": "form-control py-4", "placeholder": "Введите имя пользователя"}))
     email = forms.CharField(widget=forms.EmailInput(attrs={
-        'class': 'form-control py-4', 'placeholder': 'Введите адрес эл. почты'}))
+        "class": "form-control py-4", "placeholder": "Введите адрес эл. почты"}))
     first_name = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control py-4', 'placeholder': 'Введите имя'}))
+        "class": "form-control py-4", "placeholder": "Введите имя"}))
     last_name = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control py-4', 'placeholder': 'Введите фамилию'}))
+        "class": "form-control py-4", "placeholder": "Введите фамилию"}))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'form-control py-4', 'placeholder': 'Введите пароль'}))
+        "class": "form-control py-4", "placeholder": "Введите пароль"}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': 'form-control py-4', 'placeholder': 'Подтвердите пароль'}))
+        "class": "form-control py-4", "placeholder": "Подтвердите пароль"}))
     bot_check = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control py-4', 'placeholder': 'Введите HyperPop'}))
+        "class": "form-control py-4", "placeholder": "Введите HyperPop"}))
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'bot_check')
+        fields = ("first_name", "last_name", "username", "email", "password1", "password2", "bot_check")
 
     def clean_bot_check(self):
-        bot_check = self.cleaned_data.get('bot_check')
+        bot_check = self.cleaned_data.get("bot_check")
         if bot_check != "HyperPop":
             raise ValidationError("Надо было написать HyperPop, значит ты бот!")
         return bot_check
