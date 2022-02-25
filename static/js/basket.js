@@ -12,3 +12,18 @@ window.onload = function () {
         })
     })
 }
+
+// window.onload = function () {
+//     $('.card-footer').on('click','a[type="button"]', function () {
+//        let target = event.target;
+//        let product_id = target.href.product.id;
+//        $.ajax({
+//            url: '/baskets/basket_add/'+ product_id +'/',
+//            success: function (data) {
+//                $('.card-footer').html(data.request);
+//            }
+//        })
+//     })
+// }
+
+
