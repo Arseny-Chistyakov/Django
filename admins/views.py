@@ -50,3 +50,11 @@ def admin_users_update(request, pk):
         form = UserAdminProfileForm(instance=selected_user)
     context = {'title': 'GeekShop - Admin', 'form': form, 'selected_user': selected_user}
     return render(request, 'admins/admin-users-update-delete.html', context)
+
+
+# delete controller
+def admin_users_delete(request, pk):
+    user = User.objects.get(id=pk)
+    user.save_deleted()
+    messages.success(request, f"{user.username} has been deactivated ")
+    return HttpResponseRedirect(reverse('admins_special:admin_users'))
