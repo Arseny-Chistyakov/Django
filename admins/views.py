@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -7,12 +8,15 @@ from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm
 from users.models import User
 
 
+# main admins
+@user_passes_test(lambda u: u.is_staff)
 def index(request):
     context = {'title': 'GeekShop - Admin'}
     return render(request, 'admins/index.html', context)
 
 
 # create controller
+@user_passes_test(lambda u: u.is_staff)
 def admin_users_create(request):
     if request.method == "POST":
         form = UserAdminRegistrationForm(data=request.POST, files=request.FILES)
@@ -29,6 +33,7 @@ def admin_users_create(request):
 
 
 # read controller
+@user_passes_test(lambda u: u.is_staff)
 def admin_users(request):
     users = User.objects.all()
     context = {'title': 'GeekShop - Admin', 'users': users}
@@ -36,6 +41,7 @@ def admin_users(request):
 
 
 # update controller
+@user_passes_test(lambda u: u.is_staff)
 def admin_users_update(request, pk):
     selected_user = User.objects.get(id=pk)
     if request.method == "POST":
@@ -53,6 +59,7 @@ def admin_users_update(request, pk):
 
 
 # delete controller
+@user_passes_test(lambda u: u.is_staff)
 def admin_users_delete(request, pk):
     user = User.objects.get(id=pk)
     user.save_deleted()

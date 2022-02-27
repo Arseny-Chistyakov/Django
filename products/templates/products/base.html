@@ -50,29 +50,18 @@
                             <i class="fas fa-user-circle"></i>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li>
-                                <a class="dropdown-item" href="{% url 'users:profile' %}">
-                                    Профиль
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="orders/orders.html">
-                                    Заказы
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{% url 'admins_special:index' %}">
-                                    Админ-панель
-                                </a>
-                            </li>
+                            <li><a class="dropdown-item" href="{% url 'users:profile' %}">Профиль</a></li>
+                            <li><a class="dropdown-item" href="orders/orders.html">Заказы</a></li>
+                            {% if user.is_staff or user.is_superuser %}
+                                <li><a class="dropdown-item" href="{% url 'admins_special:index' %}">Админ-панель</a>
+                                </li>
+                            {% endif %}
+
                             <li>
                                 <hr class="dropdown-divider"/>
                             </li>
-                            <li>
-                                <a class="dropdown-item" href="{% url "users:logout" %}">
-                                    Выйти
-                                </a>
-                            </li>
+
+                            <li><a class="dropdown-item" href="{% url "users:logout" %}">Выйти</a></li>
                         </ul>
                     </li>
                 {% else %}
