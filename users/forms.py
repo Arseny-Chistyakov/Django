@@ -29,8 +29,8 @@ class UserRegistrationForm(UserCreationForm):
         "class": "form-control py-4", "placeholder": "Введите пароль"}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={
         "class": "form-control py-4", "placeholder": "Подтвердите пароль"}))
-    bot_check = forms.CharField(widget=forms.TextInput(attrs={
-        "class": "form-control py-4", "placeholder": "Введите HyperPop"}))
+    bot_check = forms.CharField(
+        widget=forms.TextInput(attrs={"class": "form-control py-4", "placeholder": "Введите HyperPop"}))
 
     class Meta:
         model = User
