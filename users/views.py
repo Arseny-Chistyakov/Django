@@ -1,4 +1,5 @@
 from django.contrib import auth, messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 
@@ -44,13 +45,17 @@ def logout(request):
     return HttpResponseRedirect(reverse("index"))
 
 
+@login_required
 def profile(request):
     user = request.user
     if request.method == "POST":
         form = UserProfileForm(instance=user, files=request.FILES, data=request.POST)
         if form.is_valid():
+            messages.success(request, "Data has been saved ")
             form.save()
             return HttpResponseRedirect(reverse("users:profile"))
+        else:
+            print(form.errors)
     else:
         form = UserProfileForm(instance=user)
     context = {
