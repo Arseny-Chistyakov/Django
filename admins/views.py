@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -57,16 +58,27 @@ class ProductAdminUpdateView(UpdateView):
     template_name = 'admins/admin-products-update-delete.html'
 
 
+# delete controller
 class UserAdminDeleteView(DeleteView):
     model = User
     success_url = reverse_lazy("admins_special:admin_users")
     template_name = 'admins/admin-users-update-delete.html'
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.safe_delete_user()
+        return HttpResponseRedirect(self.success_url)
 
 
 class ProductAdminDeleteView(DeleteView):
     model = Product
     success_url = reverse_lazy("admins_special:admin_products")
     template_name = 'admins/admin-products-update-delete.html'
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.safe_delete_product()
+        return HttpResponseRedirect(self.success_url)
 
 # read controller
 # @user_passes_test(lambda u: u.is_staff)

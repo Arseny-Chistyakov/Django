@@ -19,3 +19,7 @@ class Product(models.Model):
 
     def __str__(self):
         return f' Продукт: {self.name}| Категория: {self.category.name}'
+
+    def safe_delete_product(self):
+        self.quantity = 0
+        self.save()
