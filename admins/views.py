@@ -2,9 +2,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.views.generic.edit import CreateView
+from django.views.generic.list import ListView
 
-from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm, ProductAdminProfileForm
+from admins.forms import UserAdminProfileForm, ProductAdminProfileForm, UserAdminRegistrationForm
 from products.models import Product
 from users.models import User
 
@@ -17,53 +19,29 @@ def index(request):
 
 
 # create controller
-@user_passes_test(lambda u: u.is_staff)
-def admin_users_create(request):
-    if request.method == "POST":
-        form = UserAdminRegistrationForm(data=request.POST, files=request.FILES)
-        if form.is_valid():
-            messages.success(request, "Congratulation! Success create new user")
-            form.save()
-            return HttpResponseRedirect(reverse("admins_special:admin_users"))
-        else:
-            print(form.errors)
-    else:
-        form = UserAdminRegistrationForm()
-    context = {'title': 'GeekShop - Admin', 'form': form}
-    return render(request, 'admins/admin-users-create.html', context)
+class UserAdminCreateView(CreateView):
+    model = User
+    form_class = UserAdminRegistrationForm
+    success_url = reverse_lazy("admins_special:admin_users")
+    template_name = 'admins/admin-users-create.html'
 
 
-# create controller
-@user_passes_test(lambda u: u.is_staff)
-def admin_products_create(request):
-    if request.method == "POST":
-        form = ProductAdminProfileForm(data=request.POST, files=request.FILES)
-        if form.is_valid():
-            messages.success(request, "Congratulation! Success create new item")
-            form.save()
-            return HttpResponseRedirect(reverse("admins_special:admin_products"))
-        else:
-            print(form.errors)
-    else:
-        form = ProductAdminProfileForm()
-    context = {'title': 'GeekShop - Admin', 'form': form}
-    return render(request, 'admins/admin-products-create.html', context)
+class ProductAdminCreateView(CreateView):
+    model = Product
+    form_class = ProductAdminProfileForm
+    success_url = reverse_lazy("admins_special:admin_products")
+    template_name = 'admins/admin-products-create.html'
 
 
 # read controller
-@user_passes_test(lambda u: u.is_staff)
-def admin_users(request):
-    users = User.objects.all()
-    context = {'title': 'GeekShop - Admin', 'users': users}
-    return render(request, 'admins/admin-users-read.html', context)
+class UserAdminListView(ListView):
+    model = User
+    template_name = 'admins/admin-users-read.html'
 
 
-# read controller
-@user_passes_test(lambda u: u.is_staff)
-def admin_products(request):
-    products = Product.objects.all()
-    context = {'title': 'GeekShop - Admin', 'products': products}
-    return render(request, 'admins/admin-products-read.html', context)
+class ProductAdminListView(ListView):
+    model = Product
+    template_name = 'admins/admin-products-read.html'
 
 
 # update controller
@@ -118,3 +96,49 @@ def admin_products_delete(request, pk):
     product.delete()
     messages.success(request, f"{product.name} has been deleted ")
     return HttpResponseRedirect(reverse('admins_special:admin_products'))
+
+# # read controller
+# @user_passes_test(lambda u: u.is_staff)
+# def admin_users(request):
+#     users = User.objects.all()
+#     context = {'title': 'GeekShop - Admin', 'users': users}
+#     return render(request, 'admins/admin-users-read.html', context)
+
+# @user_passes_test(lambda u: u.is_staff)
+# def admin_products(request):
+#     products = Product.objects.all()
+#     context = {'title': 'GeekShop - Admin', 'products': products}
+#     return render(request, 'admins/admin-products-read.html', context)
+
+
+# # read controller
+# @user_passes_test(lambda u: u.is_staff)
+# def admin_users_create(request):
+#     if request.method == "POST":
+#         form = UserAdminRegistrationForm(data=request.POST, files=request.FILES)
+#         if form.is_valid():
+#             messages.success(request, "Congratulation! Success create new user")
+#             form.save()
+#             return HttpResponseRedirect(reverse("admins_special:admin_users"))
+#         else:
+#             print(form.errors)
+#     else:
+#         form = UserAdminRegistrationForm()
+#     context = {'title': 'GeekShop - Admin', 'form': form}
+#     return render(request, 'admins/admin-users-create.html', context)
+#
+# # create controller
+# @user_passes_test(lambda u: u.is_staff)
+# def admin_products_create(request):
+#     if request.method == "POST":
+#         form = ProductAdminProfileForm(data=request.POST, files=request.FILES)
+#         if form.is_valid():
+#             messages.success(request, "Congratulation! Success create new item")
+#             form.save()
+#             return HttpResponseRedirect(reverse("admins_special:admin_products"))
+#         else:
+#             print(form.errors)
+#     else:
+#         form = ProductAdminProfileForm()
+#     context = {'title': 'GeekShop - Admin', 'form': form}
+#     return render(request, 'admins/admin-products-create.html', context)
